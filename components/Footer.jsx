@@ -2,6 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { VisibilityFilters } from '../actions.js'
+import FilterLink from 'containers/FilterLink.jsx'
 
 const Footer = ({}) => (
   <p>
