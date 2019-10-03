@@ -53,7 +53,7 @@ class App extends Component {
           options={['reactjs', 'frontend']}
           />
 
-        <p>
+        <div>
           {lastUpdated && (
             <span>Last updated at {new Date(lastUpdated).toLocaleTimeString()}.{' '}</span>
           )}
@@ -68,7 +68,7 @@ class App extends Component {
               <Posts posts={posts}/>
             </div>
           )}
-        </p>
+        </div>
       </div>
     )
   }
