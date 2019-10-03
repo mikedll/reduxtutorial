@@ -1,18 +1,22 @@
 
+import { render } from 'react-dom'
 import ReactDOM from 'react-dom'
+import React from 'react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 
-import VisibleTodoList from './containers/VisibleTodoList.jsx'
-import AddTodo from './containers/AddTodo.jsx'
-import Footer from 'components/Footer.jsx'
+import todoApp from './reducers.js'
 
-const App = () => (
-  <div>
-    <AddTodo/>
-    <VisibleTodoList/>
-    <Footer/>
-  </div>
-)
+import App from './components/App.jsx'
 
-addEventListener('DOMContentLoaded', () => {              
-  ReactDOM.render(<App/>, document.querySelector('.app-container'))
+const store = createStore(todoApp)
+
+
+addEventListener('DOMContentLoaded', () => {
+  ReactDOM.render(
+    <Provider store={store}>
+      <App/>
+    </Provider>
+  ),
+  document.querySelector('.main-ui-container')
 })
