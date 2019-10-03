@@ -7,7 +7,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 
 import {
-  selectSubreddit, fetchPosts
+  selectSubreddit, fetchPostsIfNeeded
 } from './actions.js'
 
 import rootReducer from './reducers.js'
@@ -17,7 +17,8 @@ import App from './components/App.jsx'
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 store.dispatch(selectSubreddit('reactjs'))
-store.dispatch(fetchPosts('reactjs')).then(() => {
+store
+  .dispatch(fetchPostsIfNeeded('reactjs')).then(() => {
   let state = store.getState()
   if(state && state.postsBySubreddit && state.postsBySubreddit.reactjs) {
     state.postsBySubreddit.reactjs.items.forEach(post => {
