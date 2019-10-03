@@ -3,42 +3,59 @@ import update from 'immutability-helper'
 import { combineReducers } from 'redux'
 
 import {
-  SET_VISIBILITY_FILTER,
-  ADD_TODO,
-  TOGGLE_TODO,
-  VisibilityFilters,
-  addTodo, toggleTodo, setVisibilityFilter } from './actions.js'
+  SELECT_SUBREDDIT,
+  INVALIDATE_SUBREDDIT,
+  REQUEST_POSTS,
+  RECEIVE_POSTS
+ } from './actions.js'
 
-const { SHOW_ALL } = VisibilityFilters
-
-function visibilityFilter(state = SHOW_ALL, action) {
-  switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return action.filter
+function selectSubreddit(state = 'reactjs', action) {
+  switch(action.type) {
+  case SELECT_SUBREDDIT:
+    return action.subreddit
   default:
     return state
   }
 }
 
-function todos(state = [], action) {
+function posts(state = {
+  isFetching: false,
+  didInvalidate: false,
+  items: []
+},
+               action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [...state, {
-      id: action.id,
-      text: action.text,
-      completed: false
-    }]
-  case TOGGLE_TODO:
-    const index = state.findIndex(todo => todo.id === action.id)
-    return update(state, {[index]: {completed: {$set: !state[index].completed}}})
+  case INVALIDATE_SUBREDDIT:
+    return {...state, ...{didInvalidate: true}}
+  case REQUEST_POSTS:
+    return {...state, ...{isFetching: true, didInvalidate: false}}
+  case RECEIVE_POSTS:
+    return {...state, ...{
+      isFetching: false,
+      didInvalidate: false,
+      items: action.posts,
+      lastUpdated: action.receivedAt
+    }}
   default:
     return state
   }
 }
 
-const todoApp = combineReducers({
-  visibilityFilter,
-  todos
+function postsBySubreddit(state = {}, action) {
+  switch (action.type) {
+  case INVALIDATE_SUBREDDIT:
+  case RECEIVE_POSTS:
+  case REQUEST_POSTS:
+    return {...state, ...{
+      [action.subreddit]: posts(state[action.subreddit], action)
+    }}
+  default:
+    return state
+  }
+}
+
+const rootReducer = combineReducers({
+  selectSubreddit, postsBySubreddit
 })
 
-export default todoApp
+export default rootReducer
