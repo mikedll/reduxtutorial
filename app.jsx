@@ -17,7 +17,14 @@ import App from './components/App.jsx'
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 store.dispatch(selectSubreddit('reactjs'))
-store.dispatch(fetchPosts('reactjs')).then(() => console.log(store.getState()))
+store.dispatch(fetchPosts('reactjs')).then(() => {
+  let state = store.getState()
+  if(state && state.postsBySubreddit && state.postsBySubreddit.reactjs) {
+    state.postsBySubreddit.reactjs.items.forEach(post => {
+      console.log(post.title)
+    })
+  }  
+})
 
 // addEventListener('DOMContentLoaded', () => {
 //   ReactDOM.render(
