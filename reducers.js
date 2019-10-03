@@ -24,11 +24,13 @@ function todos(state = [], action) {
   switch (action.type) {
   case ADD_TODO:
     return [...state, {
-        text: action.text,
-        completed: false
-      }]
+      id: action.id,
+      text: action.text,
+      completed: false
+    }]
   case TOGGLE_TODO:
-    return update(state, {[action.index]: {completed: {$set: !state[action.index].completed}}})
+    const index = state.findIndex(todo => todo.id === action.id)
+    return update(state, {[index]: {completed: {$set: !state[index].completed}}})
   default:
     return state
   }

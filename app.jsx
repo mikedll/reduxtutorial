@@ -11,12 +11,11 @@ import App from './components/App.jsx'
 
 const store = createStore(todoApp)
 
-
 addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Provider store={store}>
       <App/>
     </Provider>
-  ),
-  document.querySelector('.main-ui-container')
+  ,
+  document.querySelector('.main-ui-container'))
 })
